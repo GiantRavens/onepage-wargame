@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>sample HTML 5 template</title>
+    <!-- <link rel="stylesheet" type="text/css" href="css/main.css" /> -->
+    <style>
+      .page-container {
+      }
+
+      @font-face {
+        font-family: "AmericanCaptain";
+        src: url("/fnt/AmericanCaptain-MdEY.otf");
+      }
+
+      @font-face {
+        font-family: "UniversLTStd";
+        src: url("/fnt/Univers LT Std - 55 Roman.otf");
+      }
+
+      .mapboard {
+        display: grid;
+        float: left;
+        grid-template-columns: repeat(16, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        padding: 1em 2em 3.4em 5em;
+        background-color: rgb(26, 26, 26);
+        z-index: 0;
+      }
+
+      .hex {
+        position: relative;
+        width: 80px;
+        height: 70px;
+        z-index: 10;
+
+        background-color: #acc11f;
+        /* background-image: url("/img/hex-clear_border-skeleton.svg"); */
+        /* this already has center dot */
+        background-image: url("/img/hex-white_border-black.svg");
+        background-size: 100% 100%;
+        clip-path: polygon(
+          25% 0%,
+          75% 0%,
+          100% 50%,
+          75% 100%,
+          25% 100%,
+          0% 50%
+        );
+        margin: 0px -20px -1.8px 0px;
+      }
+
+      .hex.c2,
+      .hex.c4,
+      .hex.c6,
+      .hex.c8,
+      .hex.c10,
+      .hex.c12,
+      .hex.c14,
+      .hex.c16 {
+        top: 34.1px;
+      }
+
+      aside {
+        z-index: 99;
+        position: absolute;
+      }
+
+      .unit {
+        /* z-index: 50; */
+        width: 3em;
+        height: 3em;
+        margin: 20px;
+        overflow: hidden;
+        border-radius: 0.25em;
+        box-shadow: 1px 1px 2px 0px rgb(13, 13, 13);
+        -webkit-box-shadow: 1px 1px 2px 0px #686868;
+      }
+
+      .unit::after {
+        content: "";
+        display: block;
+        background: transparent;
+        height: 100%;
+        width: 100%;
+        z-index: 5;
+        position: absolute;
+      }
+
+      .unit.us {
+        background-color: olivedrab;
+        color: rgba(255, 255, 255, 0.95);
+        font-family: "AmericanCaptain";
+        letter-spacing: 0.5px;
+        font-kerning: auto;
+      }
+
+      .unit .profile img {
+        position: absolute;
+        z-index: 2;
+
+        /* upper right closeup style */
+        height: 300%;
+        transform: translate(20%);
+        top: 0.25em;
+        filter: drop-shadow(1px 1px 3px rgb(13, 13, 13));
+
+        /* centered full style */
+        /* max-height: 100%;
+        left: 50%;
+        bottom: 50%;
+        transform: translate(-50%, 50%); */
+      }
+
+      .unit .type {
+        position: absolute;
+        top: 6px;
+        left: 4px;
+        font-size: 12px;
+        max-width: 100%;
+        text-align: left;
+        text-transform: uppercase;
+        text-shadow: 1.5px 1px black;
+        margin: auto;
+        z-index: 2;
+      }
+
+      .unit .name {
+        z-index: 1;
+        position: absolute;
+        left: 4px;
+        bottom: 18px;
+        margin: 0;
+        padding: 0;
+        width: min-content;
+        font-family: "UniversLTStd";
+        font-size: 4px;
+        text-transform: uppercase;
+        text-shadow: 1px 1px black;
+      }
+
+      .unit .stats {
+        position: absolute;
+        font-family: "UniversLTStd";
+        font-weight: 800;
+        text-align: left;
+        max-width: 100%;
+        width: 70%;
+        left: 4px;
+        bottom: 1px;
+        width: max-content;
+        font-size: 14px;
+        text-shadow: 1px 1px black;
+        z-index: 2;
+        margin: 0;
+        padding: 0;
+      }
+
+      .hex_id {
+        color: black;
+        text-transform: uppercase;
+        font-family: Arial;
+        font-size: 0.5em;
+        position: absolute;
+        top: 2px;
+        left: 50%;
+        transform: translate(-50%, 0);
+      }
+
+      .map_number {
+        position: absolute;
+        color: #fbee00;
+        top: 80px;
+        left: 174px;
+        top: 557px;
+        rotate: -90deg;
+        font-size: 3em;
+        font-family: Arial Bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <aside id="u1" data-item="0" class="unit us draggable" draggable="true">
+      <div class="profile"><img src="/img/us-army_scout.png" alt="" /></div>
+      <div class="type">leader</div>
+      <div class="name">cpt ferraro</div>
+      <div class="stats">9-1</div>
+    </aside>
+
+    <aside id="u2" data-item="1" class="unit us draggable" draggable="true">
+      <div class="profile"><img src="/img/us-army_scout.png" alt="" /></div>
+      <div class="type">scout</div>
+      <div class="name">sgt lloydson</div>
+      <div class="stats">1-3-8</div>
+    </aside>
+
+    <div class="page-container">
+      <div id="mapboard" class="mapboard map1"></div>
+      <div class="map_number">1</div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // write out hexes in columns and rows
+        let numRows = 8;
+        let numCols = 16;
+        let output = "";
+
+        for (let r = 1; r <= numRows; r++) {
+          for (let c = 1; c <= numCols; c++) {
+            let letter = String.fromCharCode(96 + c); // convert column number to a letter
+            let id = letter + r;
+            output += `<div id="${id}" class="hex r${r} c${c}"></div>`;
+          }
+        }
+        document.getElementById("mapboard").innerHTML = output;
+
+        // dynamic hex id labels
+        const hexElements = document.querySelectorAll(".hex");
+        for (let i = 0; i < hexElements.length; i++) {
+          const hexElement = hexElements[i];
+          const hexId = hexElement.getAttribute("id");
+          const idString = `<span class="hex_id">${hexId}</span>`;
+          hexElement.innerHTML = idString;
+        }
+      });
+    </script>
+    <script>
+      // make playing pieces as asides draggable
+      function drag_start(event) {
+        var style = window.getComputedStyle(event.target, null);
+        event.dataTransfer.setData(
+          "text/plain",
+          parseInt(style.getPropertyValue("left"), 10) -
+            event.clientX +
+            "," +
+            (parseInt(style.getPropertyValue("top"), 10) - event.clientY) +
+            "," +
+            event.target.getAttribute("data-item")
+        );
+      }
+
+      function drag_over(event) {
+        event.preventDefault();
+        return false;
+      }
+
+      function drop(event) {
+        var offset = event.dataTransfer.getData("text/plain").split(",");
+        var dm = document.getElementsByClassName("draggable");
+        dm[parseInt(offset[2])].style.left =
+          event.clientX + parseInt(offset[0], 10) + "px";
+        dm[parseInt(offset[2])].style.top =
+          event.clientY + parseInt(offset[1], 10) + "px";
+        event.preventDefault();
+        return false;
+      }
+
+      var dm = document.getElementsByClassName("draggable");
+      for (var i = 0; i < dm.length; i++) {
+        dm[i].addEventListener("dragstart", drag_start, false);
+        document.body.addEventListener("dragover", drag_over, false);
+        document.body.addEventListener("drop", drop, false);
+      }
+    </script>
+  </body>
+</html>

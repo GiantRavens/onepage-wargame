@@ -1,0 +1,84 @@
+.page-container {
+}
+
+.mapboard {
+  display: grid;
+  float: left;
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  padding: 1em 2em 3.4em 5em;
+  background-color: rgb(75, 43, 43);
+}
+
+.hex {
+  position: relative;
+  width: 80px;
+  height: 70px;
+
+  background-color: #abb05c;
+  background-image: url("/img/hex-clear_border-skeleton.svg");
+  /* this already has center dot */
+  /* background-image: url("/img/hex-white_border-black.svg"); */
+  background-size: 100% 100%;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  margin: 0px -20px -1.8px 0px;
+}
+
+.hex.c2,
+.hex.c4,
+.hex.c6,
+.hex.c8,
+.hex.c10,
+.hex.c12,
+.hex.c14,
+.hex.c16 {
+  top: 34.1px;
+}
+
+aside {
+  z-index: 10;
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid gray;
+  border-radius: 4px;
+  /* padding: 8px; */
+  box-shadow: 0.75px 0.75px 0.75px 0.75px #686868;
+  -webkit-box-shadow: 0.75px 0.75px 0.75px 0.75px #686868;
+}
+
+.hex_id {
+  color: black;
+  /* text-align: center;  */
+  text-transform: uppercase;
+  font-family: Arial;
+  font-size: 0.5em;
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.map_number {
+  position: absolute;
+  color: rgb(236, 223, 38);
+  top: 80px;
+  left: 174px;
+  top: 557px;
+  rotate: -90deg;
+  font-size: 3em;
+  font-family: Arial Bold;
+}
+
+aside#u1 {
+  background-color: red;
+  top: 40px;
+}
+
+aside#u2 {
+  background-color: blue;
+  top: 100px;
+}

@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var canvas = document.createElement("canvas");
+        canvas.width = 800;
+        canvas.height = 600;
+        document.body.appendChild(canvas);
+        var ctx = canvas.getContext("2d");
+
+        var hexagon = function (x, y, r) {
+          ctx.beginPath();
+          ctx.moveTo(x + r, y);
+          ctx.lineTo(x + r / 2, y + (r * Math.sqrt(3)) / 2);
+          ctx.lineTo(x - r / 2, y + (r * Math.sqrt(3)) / 2);
+          ctx.lineTo(x - r, y);
+          ctx.lineTo(x - r / 2, y - (r * Math.sqrt(3)) / 2);
+          ctx.lineTo(x + r / 2, y - (r * Math.sqrt(3)) / 2);
+          ctx.closePath();
+          ctx.stroke();
+        };
+
+        var hexagonArrayNested = function (x, y, r, n) {
+          for (var i = 0; i < n; i++) {
+            for (var j = 0; j < n; j++) {
+              hexagon(
+                x + i * r * 1.5,
+                y + j * r * Math.sqrt(3) + ((i % 2) * r * Math.sqrt(3)) / 2,
+                r
+              );
+              ctx.font = "6pt Arial";
+              ctx.fillText(
+                String.fromCharCode(65 + i) + (j + 1),
+                x + i * r * 1.5,
+                y + j * r * Math.sqrt(3) + ((i % 2) * r * Math.sqrt(3)) / 2
+              );
+            }
+          }
+
+          hexagon(
+            x + randomX * r * 1.5,
+            y +
+              randomY * r * Math.sqrt(3) +
+              ((randomX % 2) * r * Math.sqrt(3)) / 2,
+            r
+          );
+          ctx.fillStyle = "black";
+        };
+
+        hexagonArrayNested(50, 50, 20, 10);
+      });
+    </script>
+  </head>
+  <body style="margin: 0"></body>
+</html>
