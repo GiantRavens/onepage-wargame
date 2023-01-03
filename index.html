@@ -224,6 +224,17 @@
           const idString = `<span class="hex_id">${hexId}</span>`;
           hexElement.innerHTML = idString;
         }
+
+        // fan asides in initial allotment so easier to see
+        const unitElements = document.getElementsByTagName("aside");
+        let t = 0;
+        let l = 0;
+        for (let i = 0; i < unitElements.length; i++) {
+          const unitElement = unitElements[i];
+          unitElement.style = `top: ${t}px; left: ${l}px;`;
+          t = t + 20;
+          l = l + 3;
+        }
       });
     </script>
     <script>
